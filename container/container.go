@@ -7,6 +7,7 @@ import (
 
 	"github.com/docker/docker/api/types"
 	dockercontainer "github.com/docker/docker/api/types/container"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -102,7 +103,15 @@ func (c Container) Links() []string {
 // identified by the presence of the "com.centurylinklabs.watchtower" label in
 // the container metadata.
 func (c Container) IsWatchtower() bool {
-	val, ok := c.containerInfo.Config.Labels[watchtowerLabel]
+	log.Debugf("Checking if %s is a watchtower instance.", c.Name())
+	wasWatchtower := ContainsWatchtowerLabel(c.containerInfo.Config.Labels)
+	return wasWatchtower
+}
+
+// ContainsWatchtowerLabel takes a map of labels and values and tells
+// the consumer whether it contains a valid watchtower instance label
+func ContainsWatchtowerLabel(labels map[string]string) bool {
+	val, ok := labels[watchtowerLabel]
 	return ok && val == "true"
 }
 
