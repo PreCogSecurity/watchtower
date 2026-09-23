@@ -16,9 +16,10 @@ cd watchtower
 ## Building and testing
 watchtower is a go application and is built with go commands. The following commands assume that you are at the root level of your repo.
 ```bash
-go get -u github.com/Masterminds/glide # installs glide for vendoring
-glide install                          # retrieves package dependencies
 go build                               # compiles and packages an executable binary, watchtower
-go test                                # runs tests
+go test ./...                          # runs tests
 ./watchtower                           # runs the application (outside of a container)
 ```
+
+Dependencies are managed with [Go modules](https://go.dev/ref/mod) and are
+resolved automatically from `go.mod`/`go.sum` on the first build.
